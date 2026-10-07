@@ -22,7 +22,7 @@ Research Scientist
 
 <br>
 
-<img src="images/gui.png" alt="Moving Average Speech Lab GUI" width="95%">
+<img src="gui.png" alt="Moving Average Speech Lab GUI" width="95%">
 
 </div>
 
@@ -487,8 +487,7 @@ Moving-Average-Speech-Lab-MATLAB/
 ├── MovingAverageSpeechLabByOwais.m
 ├── README.md
 ├── LICENSE
-└── images/
-    └── gui.png
+└── gui.png
 ```
 
 ---
@@ -536,9 +535,8 @@ This tool can be used in:
 
 ## Muhammad Owais
 
-**Research Scientist**
+**Research Scientist, Khalifa University, UAE**
 
-*Signals and Systems for Robotics*
 
 </div>
 
@@ -564,52 +562,10 @@ Speech Denoising and Moving Average Filter Demonstration," MATLAB software,
   title   = {Moving Average Speech Lab: An Interactive MATLAB Tool for Speech Denoising and Moving Average Filter Demonstration},
   year    = {2026},
   note    = {MATLAB Educational Software},
-  url     = {YOUR_GITHUB_REPOSITORY_URL}
+  url     = {https://github.com/Owais-CodeHub/SpeechLab}
 }
 ```
-
-Replace:
-
-```text
-YOUR_GITHUB_REPOSITORY_URL
-```
-
-with your final GitHub repository link.
-
----
-
-# 📜 License
-
-This repository can be distributed under the **MIT License**.
-
-Suggested copyright:
-
-```text
-Copyright (c) 2026 Muhammad Owais
-```
-
-Add the full MIT License in:
-
-```text
-LICENSE
-```
-
----
-
-# 🤝 Contributing
-
-Suggestions and educational extensions are welcome.
-
-Possible future additions:
-
-- frequency-domain visualization,
-- FFT comparison,
-- spectrogram display,
-- quantitative SNR improvement,
-- median filtering,
-- low-pass FIR filters,
-- real-time filtering,
-- and robot sensor examples.
+https://github.com/Owais-CodeHub/SpeechLab
 
 ---
 
