@@ -1,580 +1,263 @@
 <div align="center">
 
-# 🎙️ Moving Average Speech Lab
+# Moving Average Speech Lab
 
-### Interactive MATLAB GUI for Speech Denoising & Signal Smoothing
+### Interactive MATLAB GUI for Speech Filtering and Signal Smoothing
 
 **Muhammad Owais**  
-Research Scientist  
+Research Scientist | Khalifa University, UAE  
 *Signals and Systems for Robotics*
 
-<br>
+[![MATLAB](https://img.shields.io/badge/MATLAB-Interactive_GUI-orange)](https://www.mathworks.com/products/matlab.html)
+[![Focus](https://img.shields.io/badge/Focus-Signals_%26_Systems-blue)](#learning-objectives)
+[![Use](https://img.shields.io/badge/Use-Educational_Demo-brightgreen)](#classroom-exercise)
 
-![MATLAB](https://img.shields.io/badge/MATLAB-R2024%2B-orange?style=for-the-badge&logo=mathworks)
-![Signal Processing](https://img.shields.io/badge/Signal%20Processing-Education-blue?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Teaching%20Tool-success?style=for-the-badge)
+**Record a voice sample, add noise, apply a moving-average filter, and hear the difference.**
 
-<br>
+![Moving Average Speech Lab graphical user interface](gui.png)
 
-> A simple, visual, and interactive MATLAB tool to understand how  
-> **moving-average filters reduce noise in real speech signals.**
-
-<br>
-
-<img src="gui.png" alt="Moving Average Speech Lab GUI" width="95%">
+[Get started](#quick-start) · [Explore the theory](#signals-and-systems-foundations) · [Try the lab](#classroom-exercise) · [Source code](MovingAverageSpeechLabByOwais.m)
 
 </div>
 
 ---
 
-## 🌟 What This Tool Does
+## Overview
 
-This MATLAB GUI turns a core **Signals and Systems** concept into a practical experiment.
+**Moving Average Speech Lab** is an interactive MATLAB teaching tool that introduces finite impulse response (FIR) filtering through a familiar signal: a recorded voice. It connects concepts from **Signals and Systems** to a practical experiment in noise, smoothing, convolution, and filter design.
 
-Students can:
+Students can start by using the GUI without writing code, then inspect and modify the MATLAB source as their understanding develops.
 
-<table>
-<tr>
-<td width="25%" align="center"><b>🎤 Record</b><br>Record or load speech</td>
-<td width="25%" align="center"><b>🌫 Add Noise</b><br>Add Gaussian noise</td>
-<td width="25%" align="center"><b>📉 Filter</b><br>Apply moving-average filtering</td>
-<td width="25%" align="center"><b>🎧 Compare</b><br>Listen and compare results</td>
-</tr>
-</table>
+### Learning objectives
 
-The complete learning flow is:
+By completing the demonstration, students should be able to:
 
-```text
-Original Voice
-     ↓
-   x[n]
-     ↓
-Add Gaussian Noise
-     ↓
-xnoisy[n] = x[n] + w[n]
-     ↓
-Moving Average Filter h[n]
-     ↓
-   y[n]
-     ↓
-Filtered Voice
-```
+1. Identify input, noise, impulse response, and output signals.
+2. Explain how signal-to-noise ratio (SNR) changes the perceived noise level.
+3. Describe moving-average filtering using a difference equation, an impulse response, and convolution.
+4. Compare uniform and weighted averaging and predict how window size affects smoothing.
+5. Explain the trade-off between suppressing rapid fluctuations and preserving speech detail.
+6. Connect an interactive experiment to its MATLAB implementation.
 
----
+## Features
 
-# 🚀 Quick Start
+| Feature | Description |
+| --- | --- |
+| Voice input | Record speech through a microphone or load an audio file. |
+| Configurable noise | Add Gaussian noise with a target SNR from **-5 to 40 dB**. |
+| Signal displays | View original speech, generated noise, noisy speech, and filtered output. |
+| Two filter modes | Select a **simple** or **weighted** moving average. |
+| Window control | Change the filter length from **3 to 10 samples**. |
+| Audio comparison | Play and compare the original, noise, noisy, and filtered signals. |
+| Coefficient display | Inspect the FIR coefficients used by the selected filter. |
+| Source-code access | Explore and modify the MATLAB implementation. |
 
-## 1. Download the repository
+## Quick start
 
-Clone the repository or download it as a ZIP.
+**Requirements:** MATLAB with support for App Designer-style UI components (`uifigure`, `uigridlayout`, and related functions). A microphone is needed only for recording; a speaker or headphones are needed for listening. Compatibility has not been formally tested across MATLAB releases.
 
-## 2. Open MATLAB
+1. [Download this repository](https://github.com/Owais-CodeHub/SpeechLab/archive/refs/heads/main.zip) and extract it, or clone it:
 
-Set the repository folder as your current MATLAB folder.
+   ```bash
+   git clone https://github.com/Owais-CodeHub/SpeechLab.git
+   ```
 
-## 3. Run
+2. Open MATLAB and change the current folder to the downloaded repository.
+3. Run the following command in the MATLAB Command Window:
 
-```matlab
-MovingAverageSpeechLabByOwais
-```
+   ```matlab
+   MovingAverageSpeechLabByOwais
+   ```
 
-The GUI will open automatically.
+4. Follow the four steps displayed in the GUI.
 
----
+> **Tip:** Start with a short voice sample of approximately 10–15 seconds. If you are unable to record, try loading an existing audio file.
 
-# 🧭 Four-Step Learning Workflow
+## Four-step experiment
 
-## ① Record or Load Voice
+| Step | Action | What to observe |
+| --- | --- | --- |
+| **1. Voice input** | Record or load speech. | The original waveform and playback. |
+| **2. Add noise** | Choose an SNR and click **Add Noise**. | The difference between the original and noisy speech. |
+| **3. Apply filter** | Set a window size, choose a filter mode, and click **APPLY FILTER**. | How the filtered waveform and sound change. |
+| **4. Compare** | Replay noisy and filtered speech. | Noise reduction versus loss of speech detail. |
 
-Record a short speech sample directly using the computer microphone, or load an existing audio file.
-
-The original discrete-time signal is represented as:
-
-\[
-x[n]
-\]
-
-Recommended recording length:
+### Signal-processing pipeline
 
 ```text
-10–15 seconds
+Original speech x[n] ------+
+                           | (+) --> Noisy speech x_noisy[n]
+Gaussian noise w[n] -------+                   |
+                                               v
+                                  FIR moving-average filter h[n]
+                                               |
+                                               v
+                                        Output y[n]
+                                               |
+                                               v
+                                  Listen and compare waveforms
 ```
 
----
+## Signals and Systems foundations
 
-## ② Add Gaussian Noise
+### 1. Noisy speech and SNR
 
-The GUI generates Gaussian noise:
+The noise-corrupted speech signal is
 
-\[
-w[n]
-\]
+$$
+x_{\mathrm{noisy}}[n] = x[n] + w[n],
+$$
 
-and adds it to the original speech:
+where $x[n]$ is the original speech and $w[n]$ is additive Gaussian noise. The signal-to-noise ratio in decibels is
 
-\[
-x_{\text{noisy}}[n] = x[n] + w[n]
-\]
+$$
+\mathrm{SNR}_{\mathrm{dB}}=10\log_{10}\left(\frac{P_x}{P_w}\right),
+$$
 
-The user can control the amount of noise using **SNR (dB)**.
+where $P_x$ and $P_w$ denote the respective average signal and noise powers. **Lower SNR** generally means a noisier recording; **higher SNR** generally means cleaner speech.
 
-The GUI shows:
+### 2. Simple moving-average filter
 
-- original speech,
-- Gaussian noise,
-- noisy speech.
+A causal, $W$-sample moving average is
 
-You can also listen to each signal separately.
+$$
+y[n] = \frac{1}{W}\sum_{k=0}^{W-1}x_{\mathrm{noisy}}[n-k].
+$$
 
----
+For $W=3$,
 
-## ③ Apply the Moving Average Filter
+$$
+y[n]=\frac{x_{\mathrm{noisy}}[n]+x_{\mathrm{noisy}}[n-1]+x_{\mathrm{noisy}}[n-2]}{3}.
+$$
 
-For a \(W\)-point moving average:
+Its impulse-response coefficients are
 
-\[
-y[n]
-=
-\frac{1}{W}
-\sum_{k=0}^{W-1}
-x_{\text{noisy}}[n-k]
-\]
+$$
+h=[1/3,\;1/3,\;1/3].
+$$
 
-For example, with \(W=3\):
+The same system can be expressed as discrete-time convolution:
 
-\[
-y[n]
-=
-\frac{x[n]+x[n-1]+x[n-2]}{3}
-\]
+$$
+y[n]=(x_{\mathrm{noisy}}*h)[n]
+     =\sum_{k=0}^{W-1}h[k]x_{\mathrm{noisy}}[n-k].
+$$
 
-The equivalent FIR impulse response is:
+### 3. Weighted moving-average filter
 
-\[
-h[n]
-=
-\left[
-\frac{1}{3},
-\frac{1}{3},
-\frac{1}{3}
-\right]
-\]
+Unlike the uniform filter, the weighted filter emphasizes more recent samples. **In the current MATLAB implementation**, the unnormalized weights are $W,W-1,\ldots,1$ and are divided by their sum.
 
-Therefore:
+For $W=3$,
 
-\[
-y[n]=x[n]*h[n]
-\]
+$$
+h=[3/6,\;2/6,\;1/6],
+$$
 
----
+so
 
-## ④ Compare the Output
+$$
+y[n]=\frac{3}{6}x_{\mathrm{noisy}}[n]
++\frac{2}{6}x_{\mathrm{noisy}}[n-1]
++\frac{1}{6}x_{\mathrm{noisy}}[n-2].
+$$
 
-The GUI lets you visually and audibly compare:
+This lets students compare equal weighting with a filter that assigns greater weight to recent observations.
 
-<table>
-<tr>
-<th>Signal</th>
-<th>Meaning</th>
-</tr>
-<tr>
-<td><b>x[n]</b></td>
-<td>Original speech</td>
-</tr>
-<tr>
-<td><b>w[n]</b></td>
-<td>Gaussian noise</td>
-</tr>
-<tr>
-<td><b>x<sub>noisy</sub>[n]</b></td>
-<td>Speech after adding noise</td>
-</tr>
-<tr>
-<td><b>h[n]</b></td>
-<td>Moving-average filter coefficients</td>
-</tr>
-<tr>
-<td><b>y[n]</b></td>
-<td>Filtered output</td>
-</tr>
-</table>
+### 4. Window size and smoothing
 
----
+| Window length | Typical effect |
+| --- | --- |
+| **3 samples** | Mild smoothing; relatively more high-frequency detail retained. |
+| **5 samples** | Increased smoothing. |
+| **10 samples** | Stronger suppression of rapid variations, with a greater possibility of speech distortion. |
 
-# 🎛️ Filter Modes
+For a fixed sampling rate, increasing the moving-average window generally increases smoothing. The audible result also depends on the input speech, noise level, and filter type.
 
-## Simple Moving Average
+**Important limitation:** A moving average is a simple low-pass filter, not a general-purpose speech enhancement system. It may reduce some high-frequency noise, but broadband noise can remain, and useful speech frequencies may also be attenuated. A longer window does **not** guarantee better speech quality.
 
-All samples receive equal weight.
+### 5. Initial conditions and output length
 
-Example:
+The implementation uses causal FIR filtering with zero initial conditions. Samples before the start of the input are assumed to be zero. For example, at $W=3$:
 
-\[
-h[n]
-=
-\left[
-\frac{1}{3},
-\frac{1}{3},
-\frac{1}{3}
-\right]
-\]
+$$
+y[0]=\frac{x_{\mathrm{noisy}}[0]+0+0}{3}.
+$$
 
-and
+MATLAB's `filter(h, 1, input)` returns an output with the **same number of samples** as its input. The zero initial conditions can affect the first few output samples.
 
-\[
-y[n]
-=
-\frac{x[n]+x[n-1]+x[n-2]}{3}
-\]
+## Classroom exercise
 
----
+**Goal:** Investigate the relationship among SNR, window size, filter coefficients, and perceived speech quality.
 
-## Weighted Moving Average
+1. **Capture the input.** Record 10–15 seconds of speech (or load an audio file). Listen to the clean input and inspect its waveform.
+2. **Introduce noise.** Set **SNR = 10 dB** and add Gaussian noise. Listen and compare the original and noisy recordings.
+3. **Test window sizes.** Keep the noisy input unchanged and apply the **simple moving average** with $W=3$, $5$, and $10$. Record your observations for each setting.
+4. **Compare filter modes.** At the same window size, compare the simple and weighted moving averages. Inspect the displayed coefficients.
+5. **Explore SNR.** Repeat with a lower SNR (e.g., **0 dB**) and a higher SNR (e.g., **20 dB**). Describe how the filtering outcome changes.
+6. **Inspect the source.** Open `MovingAverageSpeechLabByOwais.m`, locate the FIR coefficient definitions and `filter` operation, and explain how these relate to the equations above.
 
-Recent samples can receive greater importance.
+> **Fair comparison:** Keep the same speech recording and the same noisy signal while comparing window sizes or filter types. Generating new random noise between trials can make comparisons less meaningful.
 
-Example:
+### Reflection questions
 
-\[
-y[n]
-=
-0.5x[n]
-+
-0.3x[n-1]
-+
-0.2x[n-2]
-\]
+1. What do $x[n]$, $w[n]$, $x_{\mathrm{noisy}}[n]$, $h[n]$, and $y[n]$ represent in this experiment?
+2. What is the mathematical difference between a 3-point and a 5-point simple moving-average filter?
+3. As the window grows from 3 to 10, what changes do you hear? Do those changes always improve speech intelligibility?
+4. Why can a moving-average filter reduce rapid fluctuations while also suppressing useful speech components?
+5. How do the coefficients differ between simple and weighted moving averages for the same $W$?
+6. How does reducing the input SNR affect the noisy signal and the filtered result?
+7. How does the difference equation connect to the impulse response and convolution operation?
+8. Why are initial conditions relevant at the start of causal filtering?
 
-with:
+### Optional source-code challenge
 
-\[
-h[n]=[0.5,\;0.3,\;0.2]
-\]
+Modify the coefficients of a weighted filter, keeping their sum equal to one. Predict how the response will change, run the experiment, and compare the result with your prediction. Explain the outcome using the impulse response.
 
----
-
-# 🔍 Window Size Experiment
-
-The GUI allows students to test different window sizes.
-
-Suggested values:
-
-| Window | Expected Behaviour |
-|---:|---|
-| **3** | Light smoothing, better detail preservation |
-| **5** | Moderate smoothing |
-| **10** | Stronger smoothing, but more speech detail may be lost |
-
-### Key idea
-
-> A larger window generally removes more rapid fluctuations,  
-> but too much smoothing may reduce speech clarity.
-
----
-
-# 🧠 Signals & Systems Connection
-
-This tool connects multiple course topics in one experiment.
-
-<table>
-<tr>
-<td width="33%" align="center">
-
-### Difference Equation
-
-\[
-y[n]
-=
-\sum h[k]x[n-k]
-\]
-
-</td>
-<td width="33%" align="center">
-
-### Impulse Response
-
-\[
-h[n]
-\]
-
-defines the filter
-
-</td>
-<td width="33%" align="center">
-
-### Convolution
-
-\[
-y[n]=x[n]*h[n]
-\]
-
-</td>
-</tr>
-</table>
-
-So the learning path becomes:
+## Repository structure
 
 ```text
-Difference Equation
-        ↓
-Impulse Response h[n]
-        ↓
-Convolution
-        ↓
-Moving Average Filter
-        ↓
-Practical Speech Smoothing
+SpeechLab/
+├── MovingAverageSpeechLabByOwais.m  # MATLAB GUI and signal-processing code
+├── gui.png                           # GUI screenshot
+└── README.md                         # Documentation
 ```
 
----
+## Teaching applications
 
-# ➕ Padding and Same-Length Output
+Suitable for **Signals and Systems**, **Digital Signal Processing**, **robotics**, introductory **FIR filtering**, **convolution**, **difference equations**, and MATLAB-based laboratory instruction.
 
-At the beginning of the signal, some previous samples do not exist.
+This resource is intended primarily for **conceptual demonstration and hands-on learning**, rather than production-quality speech denoising.
 
-For example:
+## Citation
 
-\[
-y[0]
-=
-\frac{x[0]+x[-1]+x[-2]}{3}
-\]
+If you use the tool in teaching material, presentations, or research, please acknowledge the repository:
 
-For causal filtering, missing previous samples are treated as zero:
-
-\[
-x[-1]=0,
-\qquad
-x[-2]=0
-\]
-
-The GUI keeps the filtered signal length equal to the input length:
-
-\[
-N_{\text{output}}
-=
-N_{\text{input}}
-\]
-
----
-
-# 🎓 Suggested Student Activity
-
-Students can use the tool as a short laboratory exercise.
-
-### Experiment 1 — Original Signal
-
-Record your voice and observe the waveform.
-
-### Experiment 2 — Add Noise
-
-Choose an SNR value and observe how the signal changes.
-
-### Experiment 3 — 3-Point Filter
-
-Set:
-
-\[
-W=3
-\]
-
-Listen to the filtered output.
-
-### Experiment 4 — 5-Point Filter
-
-Set:
-
-\[
-W=5
-\]
-
-Compare it with the 3-point result.
-
-### Experiment 5 — 10-Point Filter
-
-Set:
-
-\[
-W=10
-\]
-
-Observe stronger smoothing.
-
-### Experiment 6 — Weighted Average
-
-Switch from:
-
-```text
-Simple Moving Average
-```
-
-to:
-
-```text
-Weighted Moving Average
-```
-
-and compare the result.
-
----
-
-# ❓ Questions for Students
-
-1. Did the moving-average filter reduce the noise?
-2. Which window size produced the best result?
-3. What happened to the speech quality when the window size increased?
-4. Why does a larger window produce stronger smoothing?
-5. What is the trade-off between noise reduction and signal preservation?
-6. What is the difference between simple and weighted moving averages?
-7. What do \(x[n]\), \(h[n]\), and \(y[n]\) represent?
-8. Why is zero-padding required at the beginning of the signal?
-
----
-
-# ⚖️ Engineering Trade-Off
-
-<div align="center">
-
-### More Smoothing  
-⬇  
-### More Noise Reduction  
-⬇  
-### Possible Loss of Signal Detail
-
-</div>
-
-The main engineering trade-off is:
-
-\[
-\boxed{
-\text{Noise Reduction}
-\longleftrightarrow
-\text{Signal Preservation}
-}
-\]
-
-This is an important lesson in real-world signal processing.
-
----
-
-# 🖥️ GUI Features
-
-- 🎙 Microphone voice recording
-- 📂 Audio file loading
-- 📈 Original signal visualization
-- 🌫 Gaussian noise generation
-- 🎚 Adjustable SNR
-- 📊 Separate noise visualization
-- 🔊 Original / noise / noisy / filtered audio playback
-- 🪟 Moving-average window selection
-- ⚙ Simple moving average
-- ⚖ Weighted moving average
-- 📉 Filtered signal visualization
-- 🔁 Replay and comparison controls
-- 🧮 Filter coefficient display
-- 📚 Signals & Systems interpretation
-- ➕ Causal zero-padding
-- 📏 Same-length output
-
----
-
-# 📁 Repository Structure
-
-```text
-Moving-Average-Speech-Lab-MATLAB/
-│
-├── MovingAverageSpeechLabByOwais.m
-├── README.md
-├── LICENSE
-└── gui.png
-```
-
----
-
-# 🧰 Requirements
-
-- MATLAB
-- Computer microphone for direct recording
-- Audio playback device
-
-The GUI uses MATLAB functions such as:
-
-```matlab
-uifigure
-uiaxes
-uigridlayout
-audiorecorder
-audioplayer
-audioread
-filter
-```
-
----
-
-# 💡 Educational Applications
-
-This tool can be used in:
-
-- Signals and Systems
-- Digital Signal Processing
-- Robotics signal processing
-- MATLAB laboratory sessions
-- FIR filtering demonstrations
-- Difference-equation lectures
-- Convolution demonstrations
-- Speech-processing exercises
-- Classroom tutorials
-- Student self-learning
-
----
-
-# 👨‍💻 Author
-
-<div align="center">
-
-## Muhammad Owais
-
-**Research Scientist, Khalifa University, UAE**
-
-
-</div>
-
----
-
-# 📖 Citation
-
-If you use this tool in teaching, demonstrations, coursework, research, presentations, or educational material, please cite it.
-
-### Recommended Citation
-
-```text
-M. Owais, "Moving Average Speech Lab: An Interactive MATLAB Tool for
-Speech Denoising and Moving Average Filter Demonstration," MATLAB software,
-2026.
-```
-
-### BibTeX
+> M. Owais, *Moving Average Speech Lab: Interactive MATLAB GUI for Speech Filtering and Signal Smoothing*, educational software, 2026. https://github.com/Owais-CodeHub/SpeechLab
 
 ```bibtex
-@software{owais2026movingaverage,
-  author  = {Muhammad Owais},
-  title   = {Moving Average Speech Lab: An Interactive MATLAB Tool for Speech Denoising and Moving Average Filter Demonstration},
-  year    = {2026},
-  note    = {MATLAB Educational Software},
-  url     = {https://github.com/Owais-CodeHub/SpeechLab}
+@software{owais2026speechlab,
+  author = {Owais, Muhammad},
+  title = {Moving Average Speech Lab: Interactive MATLAB GUI for Speech Filtering and Signal Smoothing},
+  year = {2026},
+  url = {https://github.com/Owais-CodeHub/SpeechLab},
+  note = {MATLAB educational software}
 }
 ```
-https://github.com/Owais-CodeHub/SpeechLab
+
+## Author
+
+**Muhammad Owais**  
+Research Scientist, Khalifa University, Abu Dhabi, UAE  
+Course context: *Signals and Systems for Robotics*
+
+**Repository:** https://github.com/Owais-CodeHub/SpeechLab
 
 ---
 
 <div align="center">
 
-# ⭐ Moving Average Speech Lab
+**Explore · Understand · Experiment · Modify · Learn**
 
-### Learn by Seeing. Learn by Listening. Learn by Experimenting.
-
-If this tool is useful for teaching or learning, please consider giving the repository a ⭐.
+If this resource is useful, consider starring the repository.
 
 </div>
